@@ -1,0 +1,5 @@
+{
+  "name": "LTE Training Course Assistant",
+  "description": "An interactive web application that provides detailed explanations and diagrams for various topics in an LTE (Long-Term Evolution) training course, powered by Gemini.",
+  "requestFramePermissions": []
+}
