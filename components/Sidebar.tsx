@@ -1,17 +1,19 @@
 
 import React, { useState } from 'react';
-import type { Module, Topic } from '../types';
-import { ChevronDownIcon, BookOpenIcon, DocumentTextIcon } from './Icons';
+import type { Module, Topic, TopicHistoryItem } from '../types';
+import { ChevronDownIcon, BookOpenIcon, DocumentTextIcon, HistoryIcon } from './Icons';
 
 interface SidebarProps {
   modules: Module[];
-  onTopicSelect: (topic: Topic, moduleTitle: string) => void;
+  onTopicSelect: (topic: Topic, module: Module) => void;
   selectedTopic: Topic | null;
+  history: TopicHistoryItem[];
+  onHistorySelect: (item: TopicHistoryItem) => void;
 }
 
 const ModuleItem: React.FC<{
   module: Module;
-  onTopicSelect: (topic: Topic, moduleTitle: string) => void;
+  onTopicSelect: (topic: Topic, module: Module) => void;
   selectedTopic: Topic | null;
 }> = ({ module, onTopicSelect, selectedTopic }) => {
   const [isOpen, setIsOpen] = useState(true);
@@ -35,7 +37,7 @@ const ModuleItem: React.FC<{
           {module.topics.map((topic) => (
             <li key={topic.id}>
               <button
-                onClick={() => onTopicSelect(topic, module.title)}
+                onClick={() => onTopicSelect(topic, module)}
                 className={`w-full text-left py-2 px-3 my-0.5 rounded-md text-sm transition-colors duration-200 flex items-center ${
                   selectedTopic?.id === topic.id
                     ? 'bg-cyan-500/20 text-cyan-300 font-medium'
@@ -53,7 +55,7 @@ const ModuleItem: React.FC<{
   );
 };
 
-export const Sidebar: React.FC<SidebarProps> = ({ modules, onTopicSelect, selectedTopic }) => {
+export const Sidebar: React.FC<SidebarProps> = ({ modules, onTopicSelect, selectedTopic, history, onHistorySelect }) => {
   return (
     <aside className="w-80 h-screen bg-gray-800 flex-shrink-0 flex flex-col border-r border-gray-700">
       <div className="p-4 border-b border-gray-700">
@@ -69,6 +71,28 @@ export const Sidebar: React.FC<SidebarProps> = ({ modules, onTopicSelect, select
           />
         ))}
       </nav>
+      {history.length > 0 && (
+        <div className="flex-shrink-0 p-4 border-t border-gray-700">
+          <h3 className="text-md font-semibold text-gray-300 mb-3 flex items-center">
+            <HistoryIcon className="h-5 w-5 mr-2 text-cyan-400" />
+            History
+          </h3>
+          <ul className="space-y-1">
+            {history.map((item) => (
+              <li key={item.topicId}>
+                <button
+                  onClick={() => onHistorySelect(item)}
+                  className="w-full text-left py-1.5 px-3 rounded-md text-sm text-gray-400 hover:bg-gray-700/80 hover:text-gray-200 transition-colors duration-200 group"
+                  title={`${item.moduleTitle} - ${item.topicTitle}`}
+                >
+                  <span className="block font-medium text-gray-300 group-hover:text-white truncate">{item.topicTitle}</span>
+                  <span className="block text-xs text-gray-500 group-hover:text-gray-400 truncate">{item.moduleTitle}</span>
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
     </aside>
   );
 };

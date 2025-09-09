@@ -1,4 +1,3 @@
-
 import { GoogleGenAI, Type } from "@google/genai";
 import type { Topic, GeneratedContent } from '../types';
 
@@ -19,7 +18,7 @@ const responseSchema = {
         },
         diagram: {
             type: Type.STRING,
-            description: "A clean, modern, and informative SVG diagram that visually represents the core concepts of the topic. The SVG must be self-contained, responsive with a viewBox, and use clear labels and a logical flow. Use a color palette of #06b6d4 (cyan-500), #f0f9ff (sky-50), #0891b2 (cyan-600), #67e8f9 (cyan-300) and #a5f3fc (cyan-200) for fills, strokes, and text colors. The SVG background should be transparent. Do not include any XML declaration (<?xml ... ?>). The root <svg> tag should be the only top-level element."
+            description: "A clean, modern, and informative SVG diagram that visually represents the core concepts of the topic. Crucially, for each key component or label in the diagram (e.g., 'eNodeB', 'MME', 'S1 Interface'), add attributes to the relevant SVG element or group (`<g>`). These attributes are: `data-tooltip-content` containing a brief, one-sentence explanation; `aria-label` with the same explanation for screen readers; `role='button'`; `tabindex='0'`; and `cursor='pointer'` to indicate interactivity. For example: `<g data-tooltip-content='The Mobility Management Entity (MME) is the key control node in the LTE core network.' aria-label='The Mobility Management Entity (MME) is the key control node in the LTE core network.' role='button' tabindex='0' cursor='pointer'>...</g>`. The SVG must be self-contained, responsive with a viewBox, and use clear labels and a logical flow. Use a color palette of #06b6d4 (cyan-500), #f0f9ff (sky-50), #0891b2 (cyan-600), #67e8f9 (cyan-300) and #a5f3fc (cyan-200) for fills, strokes, and text colors. The SVG background should be transparent. Do not include any XML declaration (<?xml ... ?>). The root <svg> tag should be the only top-level element."
         }
     },
     required: ["explanation", "diagram"]

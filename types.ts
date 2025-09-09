@@ -14,3 +14,10 @@ export interface GeneratedContent {
   explanation: string;
   diagram: string;
 }
+
+export interface TopicHistoryItem {
+  topicId: string;
+  topicTitle: string;
+  moduleId: string;
+  moduleTitle: string;
+}

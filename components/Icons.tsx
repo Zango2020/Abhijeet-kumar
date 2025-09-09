@@ -1,4 +1,3 @@
-
 import React from 'react';
 
 export const ChevronDownIcon: React.FC<{ className?: string }> = ({ className }) => (
@@ -40,5 +39,29 @@ export const DiagramIcon: React.FC<{ className?: string }> = ({ className }) => 
 export const LogoIcon: React.FC<{ className?: string }> = ({ className }) => (
     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className={className}>
       <path strokeLinecap="round" strokeLinejoin="round" d="M8.288 15.043A5.25 5.25 0 0 1 7.5 15h-3a5.25 5.25 0 0 1-2.23-10.334 5.25 5.25 0 0 1 9.962.247c.394.045.784.119 1.168.224 2.232.632 3.843 2.69 3.843 5.063 0 2.25-1.443 4.157-3.466 4.887A5.25 5.25 0 0 1 12.75 15h-1.5a.75.75 0 0 0-.75.75v.086c0 .414.336.75.75.75h1.5a6.75 6.75 0 0 0 6.64-5.448 6.75 6.75 0 0 0-11.393-4.542 6.75 6.75 0 0 0-10.16 4.956 6.75 6.75 0 0 0 3.16 5.644" />
+    </svg>
+);
+
+export const HistoryIcon: React.FC<{ className?: string }> = ({ className }) => (
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className={className}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+    </svg>
+);
+
+export const ZoomInIcon: React.FC<{ className?: string }> = ({ className }) => (
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className={className}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z M10.5 7.5v6m3-3h-6" />
+    </svg>
+);
+
+export const ZoomOutIcon: React.FC<{ className?: string }> = ({ className }) => (
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className={className}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z M13.5 10.5h-6" />
+    </svg>
+);
+
+export const ResetZoomIcon: React.FC<{ className?: string }> = ({ className }) => (
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className={className}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 3.75v4.5m0-4.5h4.5m-4.5 0L9 9M20.25 20.25v-4.5m0 4.5h-4.5m4.5 0L15 15M20.25 3.75h-4.5m4.5 0v4.5m0-4.5L15 9M3.75 20.25h4.5m-4.5 0v-4.5m0 4.5L9 15" />
     </svg>
 );
