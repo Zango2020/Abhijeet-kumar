@@ -167,4 +167,18 @@ export const COURSE_OUTLINE: Module[] = [
             { id: 'm15t5', title: 'Evolution roadmap and timeline' },
         ],
     },
+    {
+        id: 'm16',
+        title: 'Module 16: Voice over New Radio (VoNR)',
+        topics: [
+            { id: 'm16t1', title: 'VoNR Architecture Overview', hasDiagram: true },
+            { id: 'm16t2', title: '5G Core Network for Voice (AMF, SMF, UPF)' },
+            { id: 'm16t3', title: 'IMS Integration with 5G Core' },
+            { id: 'm16t4', title: 'VoNR Call Setup and Registration Flow' },
+            { id: 'm16t5', title: 'QoS for VoNR (5QI and QoS Flows)' },
+            { id: 'm16t6', title: 'VoNR vs VoLTE Comparison' },
+            { id: 'm16t7', title: 'EPS Fallback and VoNR Handover' },
+            { id: 'm16t8', title: 'VoNR Deployment Strategies' },
+        ],
+    },
 ];

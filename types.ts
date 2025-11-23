@@ -2,6 +2,7 @@
 export interface Topic {
   id: string;
   title: string;
+  hasDiagram?: boolean;
 }
 
 export interface Module {

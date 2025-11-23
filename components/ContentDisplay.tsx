@@ -3,6 +3,7 @@ import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch';
 import type { Topic, GeneratedContent } from '../types';
 import { Loader } from './Loader';
 import { InfoIcon, DiagramIcon, TextIcon, ZoomInIcon, ZoomOutIcon, ResetZoomIcon } from './Icons';
+import { VoNRArchitecture } from './VoNRArchitecture';
 
 interface ContentDisplayProps {
   topic: Topic | null;
@@ -122,6 +123,19 @@ export const ContentDisplay: React.FC<ContentDisplayProps> = ({ topic, moduleTit
 
   if (!topic) {
     return <WelcomeMessage />;
+  }
+
+  // Special handling for VoNR Architecture topic with interactive diagram
+  if (topic.id === 'm16t1' || topic.hasDiagram) {
+    return (
+      <div className="space-y-8 animate-fade-in">
+        <div>
+          <p className="text-sm font-medium text-cyan-400">{moduleTitle}</p>
+          <h1 className="text-3xl md:text-4xl font-extrabold text-white mt-1">{topic.title}</h1>
+        </div>
+        <VoNRArchitecture />
+      </div>
+    );
   }
 
   return (

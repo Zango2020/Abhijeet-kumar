@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VoNR Architecture - Interactive 5G Voice Diagram</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+            min-height: 100vh;
+            color: #f1f5f9;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header Styles */
+        .header {
+            text-align: center;
+            padding: 30px 0;
+            background: linear-gradient(90deg, rgba(34, 211, 238, 0.1) 0%, rgba(168, 85, 247, 0.1) 100%);
+            border-radius: 16px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(34, 211, 238, 0.2);
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            background: linear-gradient(90deg, #22d3ee, #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #94a3b8;
+            font-size: 1.1rem;
+        }
+
+        /* Signal Flow Buttons */
+        .flow-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .flow-btn {
+            padding: 12px 24px;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid;
+            background: transparent;
+            font-size: 0.95rem;
+        }
+
+        .flow-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .flow-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .flow-btn.active {
+            box-shadow: 0 0 20px currentColor;
+        }
+
+        /* Flow Description */
+        .flow-description {
+            text-align: center;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        /* SVG Container */
+        .diagram-container {
+            background: rgba(30, 41, 59, 0.5);
+            border-radius: 16px;
+            padding: 20px;
+            border: 1px solid rgba(71, 85, 105, 0.5);
+            overflow-x: auto;
+        }
+
+        .diagram-svg {
+            width: 100%;
+            min-height: 550px;
+        }
+
+        /* Component Styles */
+        .component {
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .component:hover {
+            transform: scale(1.05);
+        }
+
+        .component-box {
+            transition: all 0.3s ease;
+        }
+
+        .component-box.active {
+            animation: glow 1.5s infinite;
+        }
+
+        @keyframes glow {
+            0%, 100% { filter: drop-shadow(0 0 5px currentColor); }
+            50% { filter: drop-shadow(0 0 15px currentColor); }
+        }
+
+        /* Signal Animation */
+        .signal-dot {
+            animation: moveAlongPath 0.8s linear infinite;
+        }
+
+        @keyframes moveAlongPath {
+            0% { offset-distance: 0%; }
+            100% { offset-distance: 100%; }
+        }
+
+        /* Connection Lines */
+        .connection {
+            transition: all 0.3s ease;
+        }
+
+        .connection.active {
+            animation: dash 1s linear infinite;
+        }
+
+        @keyframes dash {
+            to {
+                stroke-dashoffset: -20;
+            }
+        }
+
+        /* Info Panel */
+        .info-panel {
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 12px;
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .info-panel h3 {
+            font-size: 1.3rem;
+            margin-bottom: 8px;
+        }
+
+        .info-panel p {
+            color: #cbd5e1;
+        }
+
+        .functions-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .function-item {
+            display: flex;
+            align-items: center;
+            font-size: 0.9rem;
+            color: #cbd5e1;
+        }
+
+        .function-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        /* Steps Grid */
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px;
+            margin-top: 25px;
+        }
+
+        .step-card {
+            background: rgba(51, 65, 85, 0.5);
+            border-radius: 12px;
+            padding: 16px;
+            border: 1px solid rgba(71, 85, 105, 0.5);
+            transition: all 0.3s ease;
+        }
+
+        .step-card:hover {
+            border-color: #22d3ee;
+            transform: translateY(-3px);
+        }
+
+        .step-number {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: rgba(34, 211, 238, 0.2);
+            color: #22d3ee;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 12px;
+        }
+
+        /* Comparison Section */
+        .comparison-section {
+            margin-top: 25px;
+            background: linear-gradient(90deg, rgba(147, 51, 234, 0.1) 0%, rgba(59, 130, 246, 0.1) 100%);
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid rgba(147, 51, 234, 0.3);
+        }
+
+        .comparison-section h3 {
+            color: #c084fc;
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+        }
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 12px;
+        }
+
+        .comparison-item {
+            background: rgba(30, 41, 59, 0.5);
+            border-radius: 8px;
+            padding: 12px;
+        }
+
+        .comparison-item span {
+            font-weight: 600;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .comparison-item p {
+            color: #94a3b8;
+            font-size: 0.9rem;
+        }
+
+        /* Close Button */
+        .close-btn {
+            background: transparent;
+            border: none;
+            color: #94a3b8;
+            cursor: pointer;
+            padding: 5px;
+            transition: color 0.2s;
+        }
+
+        .close-btn:hover {
+            color: #fff;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8rem;
+            }
+
+            .flow-btn {
+                padding: 10px 16px;
+                font-size: 0.85rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="app"></div>
+
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <script type="text/babel">
+        const { useState, useEffect, useCallback } = React;
+
+        // Component Data
+        const VONR_COMPONENTS = [
+            {
+                id: 'ue',
+                name: 'UE',
+                fullName: 'User Equipment',
+                description: '5G-capable device with IMS client supporting VoNR',
+                functions: ['VoNR call origination/termination', 'SIP signaling', 'RTP media handling', 'QoS bearer management'],
+                color: '#22d3ee'
+            },
+            {
+                id: 'gnb',
+                name: 'gNB',
+                fullName: 'gNodeB (5G Base Station)',
+                description: 'Next-generation base station providing 5G NR air interface',
+                functions: ['Radio resource management', 'QoS flow mapping', 'Dual connectivity', 'Beamforming & MIMO'],
+                color: '#a78bfa'
+            },
+            {
+                id: 'amf',
+                name: 'AMF',
+                fullName: 'Access and Mobility Management Function',
+                description: 'Handles registration, connection, and mobility management',
+                functions: ['NAS signaling', 'Registration management', 'Connection management', 'Mobility management'],
+                color: '#4ade80'
+            },
+            {
+                id: 'smf',
+                name: 'SMF',
+                fullName: 'Session Management Function',
+                description: 'Manages PDU sessions and QoS policies',
+                functions: ['PDU session establishment', 'QoS flow management', 'IP address allocation', 'Policy enforcement'],
+                color: '#fb923c'
+            },
+            {
+                id: 'upf',
+                name: 'UPF',
+                fullName: 'User Plane Function',
+                description: 'Handles user plane packet routing and forwarding',
+                functions: ['Packet routing', 'QoS enforcement', 'Traffic measurement', 'Lawful interception'],
+                color: '#f472b6'
+            },
+            {
+                id: 'pcf',
+                name: 'PCF',
+                fullName: 'Policy Control Function',
+                description: 'Provides policy rules for network behavior',
+                functions: ['Policy decisions', 'Access control', 'QoS policy management', 'Spending limits'],
+                color: '#facc15'
+            },
+            {
+                id: 'ims',
+                name: 'IMS',
+                fullName: 'IP Multimedia Subsystem',
+                description: 'Core network for VoNR call control and media',
+                functions: ['SIP registration', 'Call routing', 'Supplementary services', 'Emergency calls'],
+                color: '#60a5fa'
+            },
+            {
+                id: 'pcscf',
+                name: 'P-CSCF',
+                fullName: 'Proxy Call Session Control Function',
+                description: 'First point of contact for UE in IMS network',
+                functions: ['SIP proxy', 'Security gateway', 'QoS reservation', 'Emergency call detection'],
+                color: '#34d399'
+            },
+            {
+                id: 'icscf',
+                name: 'I-CSCF',
+                fullName: 'Interrogating CSCF',
+                description: 'Entry point for incoming calls and registration',
+                functions: ['S-CSCF selection', 'HSS query', 'Call routing', 'Topology hiding'],
+                color: '#c084fc'
+            },
+            {
+                id: 'scscf',
+                name: 'S-CSCF',
+                fullName: 'Serving CSCF',
+                description: 'Central node handling SIP registration and session control',
+                functions: ['SIP registration', 'Session control', 'Service triggering', 'Routing decisions'],
+                color: '#f87171'
+            }
+        ];
+
+        const SIGNAL_FLOWS = [
+            {
+                id: 'registration',
+                name: 'IMS Registration',
+                description: 'UE registers with IMS network for VoNR service',
+                path: [
+                    { from: 'ue', to: 'gnb' },
+                    { from: 'gnb', to: 'amf' },
+                    { from: 'amf', to: 'smf' },
+                    { from: 'smf', to: 'upf' },
+                    { from: 'upf', to: 'pcscf' },
+                    { from: 'pcscf', to: 'icscf' },
+                    { from: 'icscf', to: 'scscf' }
+                ],
+                color: '#22d3ee'
+            },
+            {
+                id: 'call_setup',
+                name: 'VoNR Call Setup',
+                description: 'SIP INVITE flow for establishing voice call',
+                path: [
+                    { from: 'ue', to: 'gnb' },
+                    { from: 'gnb', to: 'upf' },
+                    { from: 'upf', to: 'pcscf' },
+                    { from: 'pcscf', to: 'scscf' },
+                    { from: 'scscf', to: 'ims' }
+                ],
+                color: '#4ade80'
+            },
+            {
+                id: 'qos_setup',
+                name: 'QoS Bearer Setup',
+                description: '5QI=1 dedicated bearer for voice traffic',
+                path: [
+                    { from: 'pcf', to: 'smf' },
+                    { from: 'smf', to: 'amf' },
+                    { from: 'amf', to: 'gnb' },
+                    { from: 'gnb', to: 'ue' }
+                ],
+                color: '#facc15'
+            },
+            {
+                id: 'media_plane',
+                name: 'Media Plane (RTP)',
+                description: 'Voice media packets (RTP/RTCP)',
+                path: [
+                    { from: 'ue', to: 'gnb' },
+                    { from: 'gnb', to: 'upf' },
+                    { from: 'upf', to: 'ims' }
+                ],
+                color: '#f472b6'
+            }
+        ];
+
+        const COMPONENT_POSITIONS = {
+            ue: { x: 100, y: 300 },
+            gnb: { x: 250, y: 300 },
+            amf: { x: 400, y: 200 },
+            smf: { x: 550, y: 200 },
+            upf: { x: 400, y: 400 },
+            pcf: { x: 700, y: 200 },
+            pcscf: { x: 550, y: 400 },
+            icscf: { x: 700, y: 350 },
+            scscf: { x: 850, y: 350 },
+            ims: { x: 850, y: 450 }
+        };
+
+        const ALL_CONNECTIONS = [
+            ['ue', 'gnb'], ['gnb', 'amf'], ['gnb', 'upf'], ['amf', 'smf'],
+            ['smf', 'upf'], ['smf', 'pcf'], ['upf', 'pcscf'], ['pcscf', 'icscf'],
+            ['icscf', 'scscf'], ['scscf', 'ims'], ['pcscf', 'scscf']
+        ];
+
+        function VoNRArchitecture() {
+            const [selectedComponent, setSelectedComponent] = useState(null);
+            const [activeFlow, setActiveFlow] = useState(null);
+            const [animationStep, setAnimationStep] = useState(0);
+            const [isAnimating, setIsAnimating] = useState(false);
+            const [animatedPaths, setAnimatedPaths] = useState([]);
+
+            const startAnimation = useCallback((flow) => {
+                setActiveFlow(flow);
+                setAnimationStep(0);
+                setAnimatedPaths([]);
+                setIsAnimating(true);
+            }, []);
+
+            useEffect(() => {
+                if (!isAnimating || !activeFlow) return;
+
+                const timer = setTimeout(() => {
+                    if (animationStep < activeFlow.path.length) {
+                        const currentPath = activeFlow.path[animationStep];
+                        setAnimatedPaths(prev => [...prev, currentPath]);
+                        setAnimationStep(prev => prev + 1);
+                    } else {
+                        setTimeout(() => {
+                            setIsAnimating(false);
+                        }, 1500);
+                    }
+                }, 600);
+
+                return () => clearTimeout(timer);
+            }, [isAnimating, animationStep, activeFlow]);
+
+            const getConnectionPath = (from, to) => {
+                const start = COMPONENT_POSITIONS[from];
+                const end = COMPONENT_POSITIONS[to];
+                if (!start || !end) return '';
+
+                const startX = start.x + 40;
+                const startY = start.y + 25;
+                const endX = end.x + 40;
+                const endY = end.y + 25;
+
+                const midX = (startX + endX) / 2;
+                const midY = (startY + endY) / 2;
+                const offsetX = (endY - startY) * 0.15;
+                const offsetY = (startX - endX) * 0.15;
+
+                return `M ${startX} ${startY} Q ${midX + offsetX} ${midY + offsetY} ${endX} ${endY}`;
+            };
+
+            const isPathActive = (from, to) => {
+                return animatedPaths.some(p => p.from === from && p.to === to);
+            };
+
+            const getComponentById = (id) => {
+                return VONR_COMPONENTS.find(c => c.id === id);
+            };
+
+            return (
+                <div>
+                    {/* Header */}
+                    <div className="header">
+                        <h1>VoNR Architecture</h1>
+                        <p>Voice over New Radio - Interactive 5G Voice Network Diagram</p>
+                    </div>
+
+                    {/* Signal Flow Buttons */}
+                    <div className="flow-buttons">
+                        {SIGNAL_FLOWS.map(flow => (
+                            <button
+                                key={flow.id}
+                                onClick={() => startAnimation(flow)}
+                                disabled={isAnimating}
+                                className={`flow-btn ${activeFlow?.id === flow.id ? 'active' : ''}`}
+                                style={{
+                                    borderColor: flow.color,
+                                    color: flow.color,
+                                    backgroundColor: activeFlow?.id === flow.id ? flow.color + '22' : 'transparent'
+                                }}
+                            >
+                                {flow.name}
+                            </button>
+                        ))}
+                    </div>
+
+                    {/* Active Flow Description */}
+                    {activeFlow && (
+                        <div
+                            className="flow-description"
+                            style={{
+                                backgroundColor: activeFlow.color + '15',
+                                border: `2px solid ${activeFlow.color}40`
+                            }}
+                        >
+                            <p style={{ color: activeFlow.color, fontWeight: 600 }}>
+                                {activeFlow.name}: {activeFlow.description}
+                            </p>
+                        </div>
+                    )}
+
+                    {/* SVG Diagram */}
+                    <div className="diagram-container">
+                        <svg viewBox="0 0 1000 550" className="diagram-svg">
+                            {/* Background Pattern */}
+                            <defs>
+                                <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+                                    <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#334155" strokeWidth="0.5"/>
+                                </pattern>
+
+                                {/* Arrow Markers */}
+                                <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                                    <polygon points="0 0, 10 3.5, 0 7" fill="#64748b"/>
+                                </marker>
+
+                                {SIGNAL_FLOWS.map(flow => (
+                                    <marker
+                                        key={`arrow-${flow.id}`}
+                                        id={`arrowhead-${flow.id}`}
+                                        markerWidth="10"
+                                        markerHeight="7"
+                                        refX="9"
+                                        refY="3.5"
+                                        orient="auto"
+                                    >
+                                        <polygon points="0 0, 10 3.5, 0 7" fill={flow.color}/>
+                                    </marker>
+                                ))}
+
+                                {/* Glow Filter */}
+                                <filter id="glow">
+                                    <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                                    <feMerge>
+                                        <feMergeNode in="coloredBlur"/>
+                                        <feMergeNode in="SourceGraphic"/>
+                                    </feMerge>
+                                </filter>
+                            </defs>
+
+                            <rect width="100%" height="100%" fill="url(#grid)"/>
+
+                            {/* Domain Labels */}
+                            <g>
+                                {/* RAN Domain */}
+                                <rect x="70" y="250" width="220" height="120" rx="12"
+                                    fill="rgba(34, 211, 238, 0.05)" stroke="rgba(34, 211, 238, 0.3)" strokeWidth="2"/>
+                                <text x="180" y="275" textAnchor="middle" fill="#22d3ee" fontSize="13" fontWeight="500">
+                                    RAN Domain
+                                </text>
+
+                                {/* 5G Core Domain */}
+                                <rect x="370" y="150" width="360" height="130" rx="12"
+                                    fill="rgba(74, 222, 128, 0.05)" stroke="rgba(74, 222, 128, 0.3)" strokeWidth="2"/>
+                                <text x="550" y="175" textAnchor="middle" fill="#4ade80" fontSize="13" fontWeight="500">
+                                    5G Core (5GC)
+                                </text>
+
+                                {/* IMS Domain */}
+                                <rect x="520" y="340" width="370" height="160" rx="12"
+                                    fill="rgba(96, 165, 250, 0.05)" stroke="rgba(96, 165, 250, 0.3)" strokeWidth="2"/>
+                                <text x="700" y="365" textAnchor="middle" fill="#60a5fa" fontSize="13" fontWeight="500">
+                                    IMS Domain
+                                </text>
+                            </g>
+
+                            {/* Connection Lines */}
+                            <g>
+                                {ALL_CONNECTIONS.map(([from, to], idx) => {
+                                    const active = isPathActive(from, to);
+                                    return (
+                                        <path
+                                            key={`conn-${idx}`}
+                                            d={getConnectionPath(from, to)}
+                                            stroke={active ? activeFlow?.color : '#475569'}
+                                            strokeWidth={active ? 3 : 2}
+                                            fill="none"
+                                            markerEnd={active ? `url(#arrowhead-${activeFlow?.id})` : 'url(#arrowhead)'}
+                                            strokeDasharray={active ? "10,5" : "none"}
+                                            style={{
+                                                filter: active ? `drop-shadow(0 0 6px ${activeFlow?.color})` : 'none',
+                                                animation: active ? 'dash 0.5s linear infinite' : 'none'
+                                            }}
+                                        />
+                                    );
+                                })}
+                            </g>
+
+                            {/* Animated Signal Dots */}
+                            {activeFlow && isAnimating && animatedPaths.map((segment, idx) => {
+                                const path = getConnectionPath(segment.from, segment.to);
+                                return (
+                                    <circle
+                                        key={`signal-${idx}`}
+                                        r="6"
+                                        fill={activeFlow.color}
+                                        style={{
+                                            filter: `drop-shadow(0 0 10px ${activeFlow.color})`,
+                                            offsetPath: `path('${path}')`,
+                                            animation: 'moveAlongPath 0.6s linear infinite'
+                                        }}
+                                    >
+                                        <animateMotion
+                                            dur="0.6s"
+                                            repeatCount="indefinite"
+                                            path={path}
+                                        />
+                                    </circle>
+                                );
+                            })}
+
+                            {/* Network Components */}
+                            {VONR_COMPONENTS.map(comp => {
+                                const pos = COMPONENT_POSITIONS[comp.id];
+                                if (!pos) return null;
+
+                                const isSelected = selectedComponent?.id === comp.id;
+                                const isInActiveFlow = activeFlow?.path.some(
+                                    p => p.from === comp.id || p.to === comp.id
+                                );
+
+                                return (
+                                    <g
+                                        key={comp.id}
+                                        className="component"
+                                        onClick={() => setSelectedComponent(isSelected ? null : comp)}
+                                        transform={`translate(${pos.x}, ${pos.y})`}
+                                    >
+                                        <rect
+                                            x="0"
+                                            y="0"
+                                            width="80"
+                                            height="50"
+                                            rx="10"
+                                            fill={comp.color + '20'}
+                                            stroke={comp.color}
+                                            strokeWidth={isSelected || isInActiveFlow ? 3 : 2}
+                                            style={{
+                                                filter: isSelected
+                                                    ? `drop-shadow(0 0 15px ${comp.color})`
+                                                    : isInActiveFlow
+                                                        ? `drop-shadow(0 0 10px ${comp.color})`
+                                                        : 'none'
+                                            }}
+                                        />
+                                        <text
+                                            x="40"
+                                            y="32"
+                                            textAnchor="middle"
+                                            fill={comp.color}
+                                            fontSize="14"
+                                            fontWeight="bold"
+                                        >
+                                            {comp.name}
+                                        </text>
+
+                                        {isSelected && (
+                                            <circle
+                                                cx="75"
+                                                cy="5"
+                                                r="6"
+                                                fill={comp.color}
+                                                style={{ animation: 'pulse 1s infinite' }}
+                                            />
+                                        )}
+                                    </g>
+                                );
+                            })}
+
+                            {/* Legend */}
+                            <g transform="translate(20, 510)">
+                                <text x="0" y="0" fill="#94a3b8" fontSize="12">Legend:</text>
+                                <rect x="60" y="-10" width="14" height="14" rx="3" fill="#22d3ee20" stroke="#22d3ee" strokeWidth="2"/>
+                                <text x="80" y="2" fill="#94a3b8" fontSize="11">UE/RAN</text>
+                                <rect x="140" y="-10" width="14" height="14" rx="3" fill="#4ade8020" stroke="#4ade80" strokeWidth="2"/>
+                                <text x="160" y="2" fill="#94a3b8" fontSize="11">5G Core</text>
+                                <rect x="220" y="-10" width="14" height="14" rx="3" fill="#60a5fa20" stroke="#60a5fa" strokeWidth="2"/>
+                                <text x="240" y="2" fill="#94a3b8" fontSize="11">IMS</text>
+                            </g>
+                        </svg>
+                    </div>
+
+                    {/* Component Details Panel */}
+                    {selectedComponent && (
+                        <div
+                            className="info-panel"
+                            style={{
+                                backgroundColor: selectedComponent.color + '10',
+                                border: `2px solid ${selectedComponent.color}`
+                            }}
+                        >
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                                <div>
+                                    <h3 style={{ color: selectedComponent.color }}>
+                                        {selectedComponent.name} - {selectedComponent.fullName}
+                                    </h3>
+                                    <p>{selectedComponent.description}</p>
+                                </div>
+                                <button
+                                    className="close-btn"
+                                    onClick={() => setSelectedComponent(null)}
+                                >
+                                    <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
+                                </button>
+                            </div>
+                            <div style={{ marginTop: '15px' }}>
+                                <h4 style={{ color: '#e2e8f0', marginBottom: '10px', fontWeight: 600 }}>Key Functions:</h4>
+                                <div className="functions-list">
+                                    {selectedComponent.functions.map((func, idx) => (
+                                        <div key={idx} className="function-item">
+                                            <span className="function-dot" style={{ backgroundColor: selectedComponent.color }}></span>
+                                            {func}
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* VoNR Call Flow Steps */}
+                    <div className="steps-grid">
+                        {[
+                            { step: 1, title: 'PDU Session', desc: 'Establish 5G PDU session with QoS' },
+                            { step: 2, title: 'IMS Registration', desc: 'SIP REGISTER to P-CSCF/S-CSCF' },
+                            { step: 3, title: 'QoS Flow', desc: '5QI=1 dedicated bearer for voice' },
+                            { step: 4, title: 'Voice Call', desc: 'SIP INVITE + RTP media stream' }
+                        ].map(item => (
+                            <div key={item.step} className="step-card">
+                                <div style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
+                                    <span className="step-number">{item.step}</span>
+                                    <h4 style={{ fontWeight: 600, color: '#f1f5f9' }}>{item.title}</h4>
+                                </div>
+                                <p style={{ color: '#94a3b8', fontSize: '0.9rem' }}>{item.desc}</p>
+                            </div>
+                        ))}
+                    </div>
+
+                    {/* Comparison Section */}
+                    <div className="comparison-section">
+                        <h3>VoNR vs VoLTE Key Differences</h3>
+                        <div className="comparison-grid">
+                            <div className="comparison-item">
+                                <span style={{ color: '#22d3ee' }}>5G NR Air Interface</span>
+                                <p>Lower latency, higher bandwidth compared to LTE</p>
+                            </div>
+                            <div className="comparison-item">
+                                <span style={{ color: '#4ade80' }}>Service Based Architecture</span>
+                                <p>AMF/SMF/UPF replace MME/SGW/PGW</p>
+                            </div>
+                            <div className="comparison-item">
+                                <span style={{ color: '#facc15' }}>5QI QoS Model</span>
+                                <p>5QI=1 for voice vs QCI=1 in LTE</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Footer */}
+                    <div style={{ textAlign: 'center', marginTop: '30px', padding: '20px', color: '#64748b' }}>
+                        <p>Click on any network component to see details | Use buttons above to animate signal flows</p>
+                    </div>
+                </div>
+            );
+        }
+
+        // Render the app
+        const root = ReactDOM.createRoot(document.getElementById('app'));
+        root.render(<VoNRArchitecture />);
+    </script>
+</body>
+</html>
