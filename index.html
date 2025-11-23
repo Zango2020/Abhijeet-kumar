@@ -2,44 +2,127 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2306b6d4'%3E%3Cpath d='M8.288 15.038a5.25 5.25 0 0 1 7.424 0M5.106 11.856c3.807-3.808 9.98-3.808 13.788 0M1.924 8.674c5.565-5.565 14.587-5.565 20.152 0M12.53 18.22l-.53.53-.53-.53a.75.75 0 0 1 1.06 0Z'/%3E%3C/svg%3E" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>LTE Training Course Assistant</title>
+    <meta name="description" content="VoNR Training Course - Master Voice over New Radio technology with interactive lessons and AI-powered explanations" />
+    <meta name="theme-color" content="#06b6d4" />
+    <title>VoNR Training Course | Voice over New Radio</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
       /* Custom scrollbar for webkit browsers */
       .custom-scrollbar::-webkit-scrollbar {
-        width: 8px;
+        width: 6px;
+        height: 6px;
       }
       .custom-scrollbar::-webkit-scrollbar-track {
-        background: #1f2937; /* bg-gray-800 */
+        background: rgba(31, 41, 55, 0.5);
+        border-radius: 3px;
       }
       .custom-scrollbar::-webkit-scrollbar-thumb {
-        background: #4b5563; /* bg-gray-600 */
-        border-radius: 4px;
+        background: linear-gradient(180deg, #06b6d4, #a855f7);
+        border-radius: 3px;
       }
       .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-        background: #6b7280; /* bg-gray-500 */
+        background: linear-gradient(180deg, #22d3ee, #c084fc);
       }
-      /* Added for SVG element highlighting */
+
+      /* SVG element highlighting */
       .svg-highlight {
-        filter: drop-shadow(0 0 5px rgba(103, 232, 249, 0.8)); /* cyan-300 glow */
-        transition: filter 0.2s ease-in-out;
+        filter: drop-shadow(0 0 8px rgba(6, 182, 212, 0.8)) drop-shadow(0 0 20px rgba(168, 85, 247, 0.4));
+        transition: filter 0.3s ease-in-out, transform 0.2s ease-out;
+        transform: scale(1.02);
+      }
+
+      /* Animated gradient background */
+      @keyframes gradient-shift {
+        0%, 100% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+      }
+
+      .animate-gradient {
+        background-size: 200% 200%;
+        animation: gradient-shift 8s ease infinite;
+      }
+
+      /* Glow effects */
+      .glow-cyan {
+        box-shadow: 0 0 20px rgba(6, 182, 212, 0.3), 0 0 40px rgba(6, 182, 212, 0.1);
+      }
+
+      .glow-purple {
+        box-shadow: 0 0 20px rgba(168, 85, 247, 0.3), 0 0 40px rgba(168, 85, 247, 0.1);
+      }
+
+      /* Pulse animation */
+      @keyframes pulse-glow {
+        0%, 100% { opacity: 1; transform: scale(1); }
+        50% { opacity: 0.7; transform: scale(1.05); }
+      }
+
+      .pulse-glow {
+        animation: pulse-glow 2s ease-in-out infinite;
+      }
+
+      /* Fade in animation */
+      @keyframes fade-in {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+
+      .animate-fade-in {
+        animation: fade-in 0.5s ease-out forwards;
+      }
+
+      /* Glass effect */
+      .glass {
+        background: rgba(17, 24, 39, 0.7);
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(75, 85, 99, 0.3);
+      }
+
+      /* Selection color */
+      ::selection {
+        background: rgba(6, 182, 212, 0.3);
+        color: white;
+      }
+
+      /* Loading shimmer */
+      @keyframes shimmer {
+        0% { background-position: -200% 0; }
+        100% { background-position: 200% 0; }
+      }
+
+      .shimmer {
+        background: linear-gradient(90deg, transparent, rgba(6, 182, 212, 0.1), transparent);
+        background-size: 200% 100%;
+        animation: shimmer 1.5s infinite;
+      }
+
+      /* Focus styles */
+      *:focus-visible {
+        outline: 2px solid #06b6d4;
+        outline-offset: 2px;
+      }
+
+      /* Smooth transitions globally */
+      * {
+        transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
       }
     </style>
-  <script type="importmap">
+    <script type="importmap">
 {
   "imports": {
     "react": "https://esm.sh/react@^19.1.1",
     "react-dom/": "https://esm.sh/react-dom@^19.1.1/",
     "react/": "https://esm.sh/react@^19.1.1/",
     "@google/genai": "https://esm.sh/@google/genai@^1.14.0",
-    "react-zoom-pan-pinch": "https://esm.sh/react-zoom-pan-pinch@^3.7.0"
+    "react-zoom-pan-pinch": "https://esm.sh/react-zoom-pan-pinch@^3.7.0",
+    "framer-motion": "https://esm.sh/framer-motion@^11.15.0"
   }
 }
 </script>
-</head>
-  <body class="bg-gray-900 text-gray-100">
+  </head>
+  <body class="bg-gray-900 text-gray-100 antialiased">
     <div id="root"></div>
     <script type="module" src="/index.tsx"></script>
   </body>
