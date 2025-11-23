@@ -14,23 +14,70 @@ const responseSchema = {
     properties: {
         explanation: {
             type: Type.STRING,
-            description: "A comprehensive, clear, and well-structured explanation of the topic. Use paragraphs, bullet points, and bold text for key terms to improve readability. The tone should be professional and educational."
+            description: "A comprehensive, detailed, and engaging explanation of the 5G security topic. Write as if you are a world-class cybersecurity instructor explaining to students. Use paragraphs, bullet points, and bold text for key terms. Include: 1) Introduction/overview, 2) Core concepts with real-world examples, 3) Security implications and risks, 4) Best practices and countermeasures, 5) Industry relevance. The tone should be professional yet accessible, educational, and inspiring. Aim for 300-500 words."
         },
         diagram: {
             type: Type.STRING,
-            description: "A clean, modern, and informative SVG diagram that visually represents the core concepts of the topic. Crucially, for each key component or label in the diagram (e.g., 'eNodeB', 'MME', 'S1 Interface'), add attributes to the relevant SVG element or group (`<g>`). These attributes are: `data-tooltip-content` containing a brief, one-sentence explanation; `aria-label` with the same explanation for screen readers; `role='button'`; `tabindex='0'`; and `cursor='pointer'` to indicate interactivity. For example: `<g data-tooltip-content='The Mobility Management Entity (MME) is the key control node in the LTE core network.' aria-label='The Mobility Management Entity (MME) is the key control node in the LTE core network.' role='button' tabindex='0' cursor='pointer'>...</g>`. The SVG must be self-contained, responsive with a viewBox, and use clear labels and a logical flow. Use a color palette of #06b6d4 (cyan-500), #f0f9ff (sky-50), #0891b2 (cyan-600), #67e8f9 (cyan-300) and #a5f3fc (cyan-200) for fills, strokes, and text colors. The SVG background should be transparent. Do not include any XML declaration (<?xml ... ?>). The root <svg> tag should be the only top-level element."
+            description: `Create a stunning, modern, and highly informative SVG diagram that visually represents the 5G security concepts. The diagram should be professional-grade and suitable for enterprise training.
+
+DESIGN REQUIREMENTS:
+1. Use a dark theme with the color palette: #06b6d4 (cyan-500), #22d3ee (cyan-400), #67e8f9 (cyan-300), #0891b2 (cyan-600), #0e7490 (cyan-700), #164e63 (cyan-900), #083344 (dark bg)
+2. Add subtle gradients for depth and dimension
+3. Include drop shadows and glow effects for key elements
+4. Use rounded corners and modern styling
+5. Add icons or symbols relevant to security (locks, shields, keys, networks)
+
+INTERACTIVITY REQUIREMENTS:
+For each key component, add these attributes to the relevant SVG element or group (<g>):
+- data-tooltip-content="Brief explanation of this component"
+- aria-label="Same explanation for accessibility"
+- role="button"
+- tabindex="0"
+- cursor="pointer"
+
+Example: <g data-tooltip-content="The 5G-AKA protocol provides mutual authentication between UE and network." aria-label="..." role="button" tabindex="0" style="cursor:pointer">...</g>
+
+LAYOUT:
+- Use viewBox="0 0 800 500" for optimal aspect ratio
+- Include a title/header for the diagram
+- Use clear labels with good typography (font-family: system-ui, sans-serif)
+- Create logical visual flow (top-to-bottom or left-to-right)
+- Group related elements together
+- Add connecting lines/arrows to show relationships
+- Include a small legend if needed
+
+ANIMATION HINTS (CSS classes to add):
+- Add class="animate-pulse-glow" to security elements
+- Add class="animate-float" to floating elements
+- Add class="animate-node-pulse" to network nodes
+
+The SVG must be self-contained, responsive, and NOT include any XML declaration. The root <svg> tag should be the only top-level element.`
         }
     },
     required: ["explanation", "diagram"]
 };
 
-export const generateLteExplanation = async (topic: Topic, moduleTitle: string): Promise<GeneratedContent> => {
+export const generate5GSecurityExplanation = async (topic: Topic, moduleTitle: string): Promise<GeneratedContent> => {
     const prompt = `
-You are an expert telecommunications engineer specializing in LTE and 5G technologies. Your task is to generate educational content for a training course.
+You are a world-renowned 5G security expert and instructor with 20+ years of experience in telecommunications security, currently teaching at top institutions and consulting for major telecom operators worldwide.
 
-For the given topic: "${topic.title}" from the module "${moduleTitle}", please provide a detailed explanation and a corresponding SVG diagram.
+Your mission is to create exceptional educational content for the "5G Security Masterclass" - a professional certification course.
 
-Return the output as a single JSON object that strictly follows this schema:
+TOPIC: "${topic.title}"
+MODULE: "${moduleTitle}"
+
+Please provide:
+1. A comprehensive, engaging explanation that would make students excited about 5G security
+2. A professional-grade SVG diagram that visualizes the key concepts
+
+The content should:
+- Be technically accurate and up-to-date with 3GPP Release 16/17 standards
+- Include practical, real-world examples and scenarios
+- Highlight security threats, vulnerabilities, and countermeasures
+- Reference relevant protocols, interfaces, and network functions
+- Be suitable for professionals seeking 5G security certification
+
+Return the output as a single JSON object:
 {
   "explanation": "string",
   "diagram": "string"
@@ -44,13 +91,13 @@ Return the output as a single JSON object that strictly follows this schema:
             config: {
                 responseMimeType: "application/json",
                 responseSchema: responseSchema,
-                temperature: 0.5,
+                temperature: 0.7,
             },
         });
-        
+
         const jsonText = response.text.trim();
         const parsedContent: GeneratedContent = JSON.parse(jsonText);
-        
+
         // Basic validation
         if (typeof parsedContent.explanation !== 'string' || typeof parsedContent.diagram !== 'string') {
             throw new Error("Invalid JSON structure received from API.");
@@ -63,3 +110,6 @@ Return the output as a single JSON object that strictly follows this schema:
         throw new Error("Failed to fetch data from the Gemini API.");
     }
 };
+
+// Alias for backward compatibility
+export const generateLteExplanation = generate5GSecurityExplanation;

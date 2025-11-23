@@ -2,9 +2,10 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%2306b6d4'/%3E%3Cstop offset='100%25' stop-color='%230891b2'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath d='M50 5 L95 20 L95 55 C95 85 70 105 50 115 C30 105 5 85 5 55 L5 20 Z' fill='url(%23g)'/%3E%3Ctext x='50' y='65' text-anchor='middle' fill='white' font-size='28' font-weight='bold' font-family='monospace'%3E5G%3C/text%3E%3C/svg%3E" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>LTE Training Course Assistant</title>
+    <title>5G Security Masterclass | AI-Powered Training</title>
+    <meta name="description" content="Complete 5G Security Professional Training Course with AI-powered explanations, interactive diagrams, and teacher voice narration.">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
       /* Custom scrollbar for webkit browsers */
@@ -12,19 +13,277 @@
         width: 8px;
       }
       .custom-scrollbar::-webkit-scrollbar-track {
-        background: #1f2937; /* bg-gray-800 */
+        background: #1f2937;
       }
       .custom-scrollbar::-webkit-scrollbar-thumb {
-        background: #4b5563; /* bg-gray-600 */
+        background: #4b5563;
         border-radius: 4px;
       }
       .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-        background: #6b7280; /* bg-gray-500 */
+        background: #6b7280;
       }
-      /* Added for SVG element highlighting */
+
+      /* SVG element highlighting */
       .svg-highlight {
-        filter: drop-shadow(0 0 5px rgba(103, 232, 249, 0.8)); /* cyan-300 glow */
+        filter: drop-shadow(0 0 8px rgba(103, 232, 249, 0.9));
         transition: filter 0.2s ease-in-out;
+      }
+
+      /* Fade in animation */
+      @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+      .animate-fade-in {
+        animation: fadeIn 0.5s ease-out forwards;
+      }
+
+      /* Pulse glow effect */
+      @keyframes pulseGlow {
+        0%, 100% { filter: drop-shadow(0 0 5px rgba(6, 182, 212, 0.5)); }
+        50% { filter: drop-shadow(0 0 20px rgba(6, 182, 212, 0.8)); }
+      }
+      .animate-pulse-glow {
+        animation: pulseGlow 2s ease-in-out infinite;
+      }
+
+      /* Subtle pulse */
+      @keyframes pulseSublte {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.7; }
+      }
+      .animate-pulse-subtle {
+        animation: pulseSublte 2s ease-in-out infinite;
+      }
+
+      /* Radar scan animation */
+      @keyframes radarScan {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+      }
+      .animate-radar-scan {
+        animation: radarScan 4s linear infinite;
+      }
+
+      /* Blip animation */
+      @keyframes blip {
+        0%, 100% { opacity: 0; transform: scale(0.5); }
+        50% { opacity: 1; transform: scale(1); }
+      }
+      .animate-blip {
+        animation: blip 2s ease-in-out infinite;
+      }
+
+      /* Data packet flow */
+      @keyframes dataPacket {
+        0% { opacity: 0; transform: translateX(-20px); }
+        10% { opacity: 1; }
+        90% { opacity: 1; }
+        100% { opacity: 0; transform: translateX(220px); }
+      }
+      .animate-data-packet {
+        animation: dataPacket 3s linear infinite;
+      }
+
+      /* Waveform animation for TTS */
+      @keyframes waveform {
+        0%, 100% { height: 10px; }
+        50% { height: 30px; }
+      }
+      .animate-waveform {
+        animation: waveform 0.5s ease-in-out infinite;
+      }
+
+      /* Shimmer effect */
+      @keyframes shimmer {
+        0% { transform: translateX(-100%); }
+        100% { transform: translateX(100%); }
+      }
+      .animate-shimmer {
+        animation: shimmer 2s linear infinite;
+      }
+
+      /* Bounce subtle */
+      @keyframes bounceSublte {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-5px); }
+      }
+      .animate-bounce-subtle {
+        animation: bounceSublte 1s ease-in-out infinite;
+      }
+
+      /* Cyber grid background */
+      .cyber-grid {
+        background-image:
+          linear-gradient(rgba(6, 182, 212, 0.03) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(6, 182, 212, 0.03) 1px, transparent 1px);
+        background-size: 50px 50px;
+      }
+
+      /* Scan line effect */
+      @keyframes scanLine {
+        0% { top: -100%; }
+        100% { top: 100%; }
+      }
+      .scan-line::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        width: 100%;
+        height: 100px;
+        background: linear-gradient(
+          to bottom,
+          transparent,
+          rgba(6, 182, 212, 0.1),
+          transparent
+        );
+        animation: scanLine 8s linear infinite;
+        pointer-events: none;
+      }
+
+      /* Glow text */
+      .text-glow {
+        text-shadow: 0 0 10px rgba(6, 182, 212, 0.5),
+                     0 0 20px rgba(6, 182, 212, 0.3),
+                     0 0 30px rgba(6, 182, 212, 0.2);
+      }
+
+      /* Security badge */
+      .security-badge {
+        background: linear-gradient(135deg, rgba(6, 182, 212, 0.2), rgba(8, 145, 178, 0.2));
+        border: 1px solid rgba(6, 182, 212, 0.3);
+        box-shadow: 0 0 15px rgba(6, 182, 212, 0.2);
+      }
+
+      /* Card hover effect */
+      .card-hover {
+        transition: all 0.3s ease;
+      }
+      .card-hover:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 40px rgba(6, 182, 212, 0.15);
+      }
+
+      /* Typing cursor */
+      @keyframes blink {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0; }
+      }
+      .typing-cursor::after {
+        content: '|';
+        animation: blink 1s step-end infinite;
+        color: #06b6d4;
+      }
+
+      /* Lock animation */
+      @keyframes lockPulse {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+      }
+      .animate-lock {
+        animation: lockPulse 2s ease-in-out infinite;
+      }
+
+      /* Network node pulse */
+      @keyframes nodePulse {
+        0% { box-shadow: 0 0 0 0 rgba(6, 182, 212, 0.7); }
+        70% { box-shadow: 0 0 0 15px rgba(6, 182, 212, 0); }
+        100% { box-shadow: 0 0 0 0 rgba(6, 182, 212, 0); }
+      }
+      .animate-node-pulse {
+        animation: nodePulse 2s ease-out infinite;
+      }
+
+      /* Gradient text */
+      .gradient-text {
+        background: linear-gradient(135deg, #06b6d4, #22d3ee, #67e8f9);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+
+      /* Module card gradient border */
+      .gradient-border {
+        position: relative;
+        background: linear-gradient(135deg, #1f2937, #111827);
+        border-radius: 12px;
+      }
+      .gradient-border::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        border-radius: 12px;
+        padding: 1px;
+        background: linear-gradient(135deg, #06b6d4, #0891b2, #0e7490);
+        -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+        -webkit-mask-composite: xor;
+        mask-composite: exclude;
+        pointer-events: none;
+      }
+
+      /* Floating animation */
+      @keyframes float {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-10px); }
+      }
+      .animate-float {
+        animation: float 3s ease-in-out infinite;
+      }
+
+      /* Rotate slow */
+      @keyframes rotateSlow {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+      }
+      .animate-rotate-slow {
+        animation: rotateSlow 20s linear infinite;
+      }
+
+      /* Slide in from left */
+      @keyframes slideInLeft {
+        from { opacity: 0; transform: translateX(-30px); }
+        to { opacity: 1; transform: translateX(0); }
+      }
+      .animate-slide-in-left {
+        animation: slideInLeft 0.5s ease-out forwards;
+      }
+
+      /* Security level indicator */
+      .security-level {
+        position: relative;
+        overflow: hidden;
+      }
+      .security-level::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.2),
+          transparent
+        );
+        animation: shimmer 3s linear infinite;
+      }
+
+      /* Loading dots */
+      @keyframes loadingDots {
+        0%, 20% { opacity: 0; }
+        40% { opacity: 1; }
+        100% { opacity: 0; }
+      }
+      .loading-dot {
+        animation: loadingDots 1.4s infinite;
+      }
+      .loading-dot:nth-child(2) { animation-delay: 0.2s; }
+      .loading-dot:nth-child(3) { animation-delay: 0.4s; }
+
+      /* Hexagon pattern */
+      .hexagon-bg {
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='49' viewBox='0 0 28 49'%3E%3Cg fill-rule='evenodd'%3E%3Cg fill='%2306b6d4' fill-opacity='0.03'%3E%3Cpath d='M13.99 9.25l13 7.5v15l-13 7.5L1 31.75v-15l12.99-7.5zM3 17.9v12.7l10.99 6.34 11-6.35V17.9l-11-6.34L3 17.9zM0 15l12.98-7.5V0h-2v6.35L0 12.69v2.3zm0 18.5L12.98 41v8h-2v-6.85L0 35.81v-2.3zM15 0v7.5L27.99 15H28v-2.31h-.01L17 6.35V0h-2zm0 49v-8l12.99-7.5H28v2.31h-.01L17 42.15V49h-2z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
       }
     </style>
   <script type="importmap">
@@ -39,7 +298,7 @@
 }
 </script>
 </head>
-  <body class="bg-gray-900 text-gray-100">
+  <body class="bg-gray-900 text-gray-100 hexagon-bg">
     <div id="root"></div>
     <script type="module" src="/index.tsx"></script>
   </body>
